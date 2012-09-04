@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="2321bb59-b4c6-48bf-ae7c-8a143e3e629e" Publisher="CN=chao" Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>Pomodoro Timer</DisplayName>
+    <PublisherDisplayName>chao zhou</PublisherDisplayName>
+    <Logo>Assets\PomodoroTimerStoreLogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.2.1</OSMinVersion>
+    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PomodoroTimer.App">
+      <VisualElements DisplayName="PomodoroTimer" Logo="Assets\PomodoroTimerLogo.png" SmallLogo="Assets\PomodoroTimerSmallLogo.png" Description="Pomodoro Timer" ForegroundText="light" BackgroundColor="#FF0000" ToastCapable="true">
+        <DefaultTile ShowName="noLogos" />
+        <SplashScreen Image="Assets\PomodoroTimerSplashScreen.png" BackgroundColor="#FF0000" />
+      </VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
