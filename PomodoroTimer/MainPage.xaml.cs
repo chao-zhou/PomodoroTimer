@@ -39,8 +39,11 @@ namespace PomodoroTimer
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            pMgr = new PomodoroManager(new Settings());
+            settings = new Settings();
+            pMgr = new PomodoroManager(settings);
             nMgr = new NotificationManager();
+
+            autoSwitch.IsOn = settings.IsAutoSwich;
 
             timer.CompleteHandler = new EventHandler(StepComplete);
         }
@@ -58,18 +61,32 @@ namespace PomodoroTimer
 
         private void StepComplete(object sender, EventArgs e)
         {
-            var msg = string.Format("{0} is complete !", pMgr.CurrentStep);
-            nMgr.ShowToast(msg);
+            CompleteCurrentAndSetNext();
 
-            pMgr.Next();
+            if (!autoSwitch.IsOn)
+            {
+                state.Text = pMgr.CurrentStep.ToString();
+                playButton.IsChecked = false;
+                return;
+            }
 
-            state.Text = pMgr.CurrentStep.ToString();
-            timer.Start(pMgr.CurrentLength * 60);
-            
-            msg = string.Format("{0} is start !", pMgr.CurrentStep);
-            nMgr.ShowToast(msg);
+            StartNext(); 
         }
 
+        private void CompleteCurrentAndSetNext()
+        {
+            var msg = string.Format("{0} is complete !", pMgr.CurrentStep);
+            nMgr.ShowToast(msg);
+            pMgr.Next();
+        }
+
+        private void StartNext() {
+            state.Text = pMgr.CurrentStep.ToString();
+            timer.Start(pMgr.CurrentLength * 60);
+
+            var msg = string.Format("{0} is start !", pMgr.CurrentStep);
+            nMgr.ShowToast(msg);
+        }
 
         private void playButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -81,12 +98,27 @@ namespace PomodoroTimer
 
         private void playButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            timer.Reset();
+            timer.Reset(pMgr.CurrentLength * 60);
             playButton.Content = "Start";
+        }
+
+        private void autoSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (settings == null)
+                return;
+
+            settings.IsAutoSwich = ((ToggleSwitch)sender).IsOn;
+            settings.Save();
         }
 
         private PomodoroManager pMgr;
         private NotificationManager nMgr;
+        private Settings settings;
+
+       
+
+   
+ 
     }
 
 
