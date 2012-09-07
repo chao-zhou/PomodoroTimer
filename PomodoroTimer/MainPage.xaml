@@ -22,8 +22,7 @@
     <common:LayoutAwarePage.BottomAppBar>
         <AppBar Padding="10,0,10,0">
             <Grid>
-                <Button HorizontalAlignment="Right"
-                    Style="{StaticResource SettingsAppBarButtonStyle}"/>
+                <ToggleSwitch x:Name="autoSwitch" Header="Auto Start Next Period" HorizontalAlignment="Right" HorizontalContentAlignment="Left" IsOn="True" OffContent="Close" OnContent="Enable" Toggled="autoSwitch_Toggled"/>
             </Grid>
         </AppBar>
     </common:LayoutAwarePage.BottomAppBar>
