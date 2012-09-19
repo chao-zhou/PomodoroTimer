@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PomodoroTimer.Convertor
 {
@@ -13,7 +9,7 @@ namespace PomodoroTimer.Convertor
             if (value == null)
                 throw new ArgumentNullException("value", "Value cannot be null.");
 
-            if (!typeof(int).Equals(value.GetType()))
+            if (!(value is int))
                 throw new ArgumentException("Value must be of type int.", "value");
 
             var totalSeconds = (int)value;
@@ -27,12 +23,16 @@ namespace PomodoroTimer.Convertor
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             var strVal = value as string;
-            var vals = strVal.Split(':');
+            if (strVal == null)
+            {
+                return 0;
+            }
 
+            var vals = strVal.Split(':');
             var minutes = int.Parse(vals[0]);
             var seconds = int.Parse(vals[1]);
-            
-            return minutes * 60 + seconds;
+
+            return minutes*60 + seconds;
         }
     }
 }

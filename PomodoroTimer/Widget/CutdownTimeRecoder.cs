@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PomodoroTimer.Widget
+﻿namespace PomodoroTimer.Widget
 {
     class CutdownTimeRecoder
     {
         public int TotalTime
         {
-            get { return _TotalTime; }
+            get { return _totalTime; }
             set
             {
                 PassedTime = 0;
-                _TotalTime = value;
+                _totalTime = value;
             }
         }
         public int PassedTime { get; set; }
@@ -25,6 +19,6 @@ namespace PomodoroTimer.Widget
             PassedTime++;
         }
 
-        private int _TotalTime;
+        private int _totalTime;
     }
 }

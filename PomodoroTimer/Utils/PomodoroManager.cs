@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PomodoroTimer
+﻿namespace PomodoroTimer.Utils
 {
     class PomodoroManager
     {
@@ -17,7 +11,7 @@ namespace PomodoroTimer
 
         public PomodoroManager(Settings settings)
         {
-            this.settings = settings;
+            _settings = settings;
         }
 
         public Step CurrentStep { get; private set; }
@@ -41,10 +35,12 @@ namespace PomodoroTimer
             if (ShouldLongBreak())
             {
                 CurrentStep = Step.LongBreak;
+                LongBreakCount++;
             }
             else if (ShouldBreak())
             {
                 CurrentStep = Step.Break;
+                BreakCount++;
             }
             else
             {
@@ -82,14 +78,14 @@ namespace PomodoroTimer
         private int GetCurrentLength()
         {
             switch (CurrentStep) {
-                case Step.Pomodoro: return settings.PomodoroLength;
-                case Step.Break: return settings.BreakLength;
-                case Step.LongBreak: return settings.LongBreakLength;
+                case Step.Pomodoro: return _settings.PomodoroLength;
+                case Step.Break: return _settings.BreakLength;
+                case Step.LongBreak: return _settings.LongBreakLength;
                 default: return 0;
             }
         }
 
-        private Settings settings;
+        private readonly Settings _settings;
      
         
     }

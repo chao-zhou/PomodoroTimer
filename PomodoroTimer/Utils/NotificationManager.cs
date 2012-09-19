@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Data.Xml.Dom;
+﻿using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
 
-
-namespace PomodoroTimer
+namespace PomodoroTimer.Utils
 {
     class NotificationManager
     {
         public ToastNotification CreateToast(string msg)
         {
-            var tmp = ToastTemplateType.ToastText01;
+            const ToastTemplateType tmp = ToastTemplateType.ToastText01;
             var xml = ToastNotificationManager.GetTemplateContent(tmp);
 
             SetToastText(xml,msg);
@@ -35,26 +29,28 @@ namespace PomodoroTimer
             ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
 
-        private void SetToastText(XmlDocument xml,string msg)
+        private static void SetToastText(XmlDocument xml,string msg)
         {
             var nodes = xml.GetElementsByTagName("text");
             nodes[0].AppendChild(xml.CreateTextNode(msg));
         }
 
+/*
         private void SetToastImage(XmlDocument xml)
         {
             var nodes = xml.GetElementsByTagName("image");
             ((XmlElement)nodes[0]).SetAttribute("src", "ms-appx:///Assets/PomodoroTimerLogo.png");
             ((XmlElement)nodes[0]).SetAttribute("alt", "Pomodoro Timer");
         }
+*/
 
-        private void SetToastDuration(XmlDocument xml)
+        private static void SetToastDuration(XmlDocument xml)
         {
             var node = xml.SelectSingleNode("/toast");
             ((XmlElement)node).SetAttribute("duration", "long");
         }
 
-        private void SetToatAudio(XmlDocument xml)
+        private static void SetToatAudio(XmlDocument xml)
         {
             var node = xml.SelectSingleNode("/toast");
             var audio = xml.CreateElement("audio");

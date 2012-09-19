@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Storage;
+﻿using Windows.Storage;
 using PomodoroTimer.Extension;
 
-namespace PomodoroTimer
+namespace PomodoroTimer.Utils
 {
     class Settings
     {
@@ -24,10 +19,10 @@ namespace PomodoroTimer
         public void ReLoad()
         {
             var store = ApplicationData.Current.LocalSettings;
-            BreakLength = store.Values.GetValue<int>("breakLen", 5);
-            LongBreakLength = store.Values.GetValue<int>("lbreakLen", 15);
-            PomodoroLength = store.Values.GetValue<int>("workLen", 25);
-            IsAutoSwich = store.Values.GetValue<bool>("autoSwich", true);
+            BreakLength = store.Values.GetValue("breakLen", 5);
+            LongBreakLength = store.Values.GetValue("lbreakLen", 15);
+            PomodoroLength = store.Values.GetValue("workLen", 25);
+            IsAutoSwich = store.Values.GetValue("autoSwich", true);
         }
 
         public void Save()

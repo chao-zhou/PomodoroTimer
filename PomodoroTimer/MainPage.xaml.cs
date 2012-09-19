@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using PomodoroTimer.Utils;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -20,11 +11,11 @@ namespace PomodoroTimer
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class MainPage : PomodoroTimer.Common.LayoutAwarePage
+    public sealed partial class MainPage
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
           
         }
 
@@ -39,19 +30,21 @@ namespace PomodoroTimer
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            settings = new Settings();
-            pMgr = new PomodoroManager(settings);
-            nMgr = new NotificationManager();
+            _settings = new Settings();
+            _pomodoroManager = new PomodoroManager(_settings);
+            _notificationManager = new NotificationManager();
 
-            autoSwitch.IsOn = settings.IsAutoSwich;
+            autoSwitch.IsOn = _settings.IsAutoSwich;
 
-            timer.CompleteHandler = new EventHandler(StepComplete);
+            timer.CompleteHandler = StepComplete;
         }
 
         /// <summary>
         /// Preserves state associated with this page in case the application is suspended or the
         /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
+        /// requirements of <see>
+        ///                   <cref>SuspensionManager.SessionState</cref>
+        ///                 </see> .
         /// </summary>
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
@@ -65,7 +58,7 @@ namespace PomodoroTimer
 
             if (!autoSwitch.IsOn)
             {
-                state.Text = pMgr.CurrentStep.ToString();
+                state.Text = _pomodoroManager.CurrentStep.ToString();
                 playButton.IsChecked = false;
                 return;
             }
@@ -75,45 +68,45 @@ namespace PomodoroTimer
 
         private void CompleteCurrentAndSetNext()
         {
-            var msg = string.Format("{0} is complete !", pMgr.CurrentStep);
-            nMgr.ShowToast(msg);
-            pMgr.Next();
+            var msg = string.Format("{0} is complete !", _pomodoroManager.CurrentStep);
+            _notificationManager.ShowToast(msg);
+            _pomodoroManager.Next();
         }
 
         private void StartNext() {
-            state.Text = pMgr.CurrentStep.ToString();
-            timer.Start(pMgr.CurrentLength * 60);
+            state.Text = _pomodoroManager.CurrentStep.ToString();
+            timer.Start(_pomodoroManager.CurrentLength * 60);
 
-            var msg = string.Format("{0} is start !", pMgr.CurrentStep);
-            nMgr.ShowToast(msg);
+            var msg = string.Format("{0} is start !", _pomodoroManager.CurrentStep);
+            _notificationManager.ShowToast(msg);
         }
 
-        private void playButton_Checked(object sender, RoutedEventArgs e)
+        private void PlayButtonChecked(object sender, RoutedEventArgs e)
         {
-            pMgr.Start(PomodoroManager.Step.Pomodoro); 
-            state.Text = pMgr.CurrentStep.ToString();
-            timer.Start(pMgr.CurrentLength * 60);
+            _pomodoroManager.Start(PomodoroManager.Step.Pomodoro); 
+            state.Text = _pomodoroManager.CurrentStep.ToString();
+            timer.Start(_pomodoroManager.CurrentLength * 60);
             playButton.Content = "Interruption";
         }
 
-        private void playButton_Unchecked(object sender, RoutedEventArgs e)
+        private void PlayButtonUnchecked(object sender, RoutedEventArgs e)
         {
-            timer.Reset(pMgr.CurrentLength * 60);
+            timer.Reset(_pomodoroManager.CurrentLength * 60);
             playButton.Content = "Start";
         }
 
-        private void autoSwitch_Toggled(object sender, RoutedEventArgs e)
+        private void AutoSwitchToggled(object sender, RoutedEventArgs e)
         {
-            if (settings == null)
+            if (_settings == null)
                 return;
 
-            settings.IsAutoSwich = ((ToggleSwitch)sender).IsOn;
-            settings.Save();
+            _settings.IsAutoSwich = ((ToggleSwitch)sender).IsOn;
+            _settings.Save();
         }
 
-        private PomodoroManager pMgr;
-        private NotificationManager nMgr;
-        private Settings settings;
+        private PomodoroManager _pomodoroManager;
+        private NotificationManager _notificationManager;
+        private Settings _settings;
 
        
 
